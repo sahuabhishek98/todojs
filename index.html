@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS-ToDo_Project</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+<div class="container">
+      <span id="task1">Tasks</span>
+      <span id="list1">List</span> 
+      <div id="task2">No Item in the todo list</div>
+
+      <a href="#" class="plus">
+      <i class="fa-solid fa-circle-plus"   onclick="addCard()"></i> Add Item</a> 
+      <div id="firstparent"></div> 
+  </div>
+
+  <div id="card1">
+    <h3>Add New List</h3>
+    <label for="name"></label>
+    <input type="text" id="name" value=""><br><br>
+    <button onclick="addTask()" id="b1">Add</button>
+    <button onclick="closeTask()" id="b2">Close</button>
+  </div>
+
+  <div id="card2">
+    <h3>Add New Item</h3>
+    <label for="name1"></label>
+    <input type="text" id="name1" value=""><br><br>
+    <button id="btn" class="b1">Add</button>
+    <button onclick="closeTask_1()" class="b2">Close</button>
+  </div> 
+
+ 
+
+   <script src="index.js"></script> 
+    
+</body>
+</html>
