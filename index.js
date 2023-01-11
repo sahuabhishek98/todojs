@@ -1,106 +1,175 @@
-function addCard(){//onclick  plus icon function we get pop card
-    let cardFirst = document.getElementById("card1");
-    const parentElement = document.getElementById("firstparent");
-    cardFirst.style.display = "block";
-    parentElement.style.filter = "blur(11px)";
-   
- }
+let arr_of_obj = new Set();
+let value_id;
+let card_item;
+let flag = false;
+let subtask = new Map;
 
+function modal(){
+    document.getElementById("modaldiv").style.display = "block";
+    document.getElementById("modaldiv").style.backdropFilter = "blur(5px)";
 
-const tasklist=[];
-const addTask=function(){
-    const name=document.getElementById("name").value 
-    console.log(name);
-    const tempObj={
-        id:Date.now(),
-        taskName:name
+};
+  
+
+function addCard(){
+    let card_title = document.getElementById("inputM-box").value;
+    createObj(card_title);
+    closeModal();
+}
+
+function closeModal(){
+    document.getElementById("modaldiv").style.display = "none";
+}
+
+function createObj(title){
+    document.getElementById("emptyList").style.display = "none";
+    let card_of_obj ={
+        title: title,
+        id: Date.now(),
+        subtask
+    };
+    arr_of_obj.add(card_of_obj);
+    createCard(card_of_obj.id);
+
+}
+
+function createCard(){
+    let first_card = document.querySelector('.card').cloneNode(true);
+    display(first_card);
+};
+
+function display(card){
+    document.getElementById('emptyList').style.display = 'none'
+    arr_of_obj.forEach(element => {
+        card.id = element.id;
+        card.querySelector(".card-head").innerHTML = element.title;
+        card.querySelector(".card-head").setAttribute('value',`${element.id}`);
+        card.setAttribute("value",`${element.id}`);
+        card.setAttribute("display","block");
+        card.setAttribute("min-height","300px");
+        card.querySelector(".delete-button-in-card").setAttribute("value",`${element.id}`);
+        card.querySelector(".delete-button-in-card").setAttribute("onclick","deleteCard(this.value)");
+        card.querySelector(".add-button-in-card").setAttribute("value",`${element.id}`);
+        card.querySelector(".add-button-in-card").setAttribute("onclick","addSubtask(this.value)");    
+    });
+    if(flag)
+    card.style.display = 'none';
+    else
+    card.style.display = "block";
+    document.getElementById("outer_container").appendChild(card);
+}
+
+function addList(){
+    let List_of_item = document.querySelector(".this-list-element").cloneNode(true);
+    let card_of_item = document.getElementById("inputM-box-card").value;
+    console.log(value_id);
+    
+    List_of_item.innerText =  card_of_item ;
+    List_of_item.style.display = "block";
+    List_of_item.setAttribute('id',`${Date.now()}`);
+    List_of_item.setAttribute('value',`${Date.now()}`);
+    List_of_item.setAttribute('style',"margin-left: 10px;");
+
+    let done_button = document.createElement('button');
+    done_button.setAttribute('id',`check-done-${Date.now()}`);
+    done_button.setAttribute('class','completed');
+    done_button.setAttribute('value',`${Date.now()}`);
+    done_button.setAttribute('onclick','completedTask(this.value)');
+    done_button.innerText = 'Mark as Done';
+    done_button.setAttribute('style','font-size:15px; cursor:pointer; height:18px; border-radius:10px;');
+
+    List_of_item.appendChild(done_button);
+
+    List_of_item.setAttribute('onclick',"completedTask(this.value)");
+
+    for(obj of arr_of_obj){
+        for(prop in obj){
+            if(obj.id == value_id){
+                obj.subtask.set(`${card_item}`,`${Date.now()}`);
+                break;
+            }
+        }
     }
-    tasklist.push(tempObj);
-    console.log(tasklist);
-    addTaskOnScreen();
+
+    document.getElementById(`${value_id}`).getElementsByClassName('add-list')[0].appendChild(List_of_item).appendChild(done_button);
+    closeCardModal();
+
 }
-function addTaskOnScreen(){
-    const element=document.createElement("div");
-    element.setAttribute("class","child");
-    element.innerText=tasklist[tasklist.length-1].taskName;
-    const parentElement=document.getElementById("firstparent");
-    parentElement.appendChild(element);
-    const horiline=document.createElement("hr");
-    horiline.setAttribute("class","line");
-    element.appendChild(horiline);
-    const delIcon=document.createElement("i");
-    delIcon.setAttribute("class","fa fa-trash deleteIcon");
-    element.appendChild(delIcon);
-    const addIcon=document.createElement("i");
-    addIcon.setAttribute("class","fa-solid fa-circle-plus addIcon");
-    element.appendChild(addIcon);
-// #######################################################
-// card1 code
-    let card1=document.getElementById("card1");
-    card1.style.display="none";
-    parentElement.style.filter="blur(0px)";
-    const task2=document.getElementById("task2");
-    task2.style.display="none";
-// #######################################################
-// card2 code
-    let card2=document.getElementById('card2');
-    addIcon.addEventListener('click',function(){
-        card2.style.display="block";
-        parentElement.style.filter="blur(12px)";
-    })
+
+function closeCardModal(){
+    document.getElementById('modalDiv_card').style.display = "none";
+}
+
+function addSubtask(val) {
+    document.getElementById("modalDiv_card").style.display = "block";
+    value_id = val;
+};
 
 
-
-    const secondCard=document.createElement("div");
-    element.appendChild(secondCard);
-
-    const btn=document.getElementById("btn");
-    const name1=document.getElementById("name1");
+function deleteCard(val){
+    var delete_div = document.getElementById(`${val}`);
+    
+    for(obj of arr_of_obj){
+        for(prop in obj){
+            if (obj.id==val)
+            arr_of_obj.delete(obj);
+            break;
+        }
+    }
+    delete_div.parentNode.removeChild(delete_div);
+    if(arr_of_obj.size==0){
+        document.getElementById('emptyList').style.display = 'block';
+    }
+    
    
+};
 
-    btn.addEventListener('click',function(){
-        parentElement.style.filter="blur(0px)";
-        card2.style.display="none";
-        let paragraph=document.createElement('p');
-        paragraph.classList.add('paragraph-styling');
-        secondCard.appendChild(paragraph);
-        paragraph.innerText=name1.value;
-        name1.value="";
 
-        let markIcon=document.createElement("button");
-        markIcon.setAttribute("id","markIcon");
-        markIcon.innerHTML="Mark Done";
-        markIcon.style.backgroundColor="blue";
-        markIcon.style.color="white";
-        markIcon.style.width="100px";
-        markIcon.style.height="25px";
-        markIcon.style.textAlign="center";
-        markIcon.style.borderRadius="5px";
-        markIcon.style.fontSize="15px";
-        markIcon.style.padding="4px";
-        secondCard.appendChild(markIcon);
-       
-        markIcon.addEventListener('click',function(){
-            paragraph.style.textDecoration="line-through";
-            paragraph.style.color="red";
-            markIcon.style.display="none";
-        })   
-       
-    })
 
+function completedTask(value){
+    document.getElementById(`${value}`).style.textDecoration = 'line-through';
+    document.getElementById(`${value}`).style.color = 'gray';
+    document.getElementById(`check-done-${value}`).remove();
+    
 }
 
 
 
-function closeTask(){
-    let card1=document.getElementById("card1");
-    const parentElement=document.getElementById("firstparent");
-    card1.style.display="none";
-    parentElement.style.filter="blur(0px)";
-}
-function closeTask_1(){
-    let card2=document.getElementById("card2");
-    const parentElement=document.getElementById("firstparent");
-    card2.style.display="none";
-     parentElement.style.filter="blur(0px)";
-}
+function headerFunc(val){
+        
+    for(let ele of arr_of_obj){
+        for(let id in ele){
+            if(ele[id]==val){
+                card_header = ele.title;
+                break;
+            };
+        };
+    };
+    
+    document.querySelector(".back-button").style.display = 'inline';
+    document.querySelector("#name_of_head").style.display = 'none';
+    document.querySelector("#button_text").style.display = 'none';    
+
+    
+    for(let ele of arr_of_obj){
+
+            if(ele.id==val){
+                document.getElementById(`${ele.id}`).style.display = 'block';
+            }
+            else {
+                document.getElementById(`${ele.id}`).style.display = 'none';
+            }
+    };
+    
+};
+
+document.getElementsByClassName("backButton")[0]
+  .addEventListener("click", () => {
+    title_flag = false;
+    document.querySelector("#name_of_head").style.display = "block";
+    document.querySelector(".back-button").style.display = "none";
+    for (let ele of arr_of_obj) {
+      document.getElementById(ele.id).style.display = "block";
+    }
+    document.getElementsByClassName("card-head")[0].style.display = "none";
+  });
